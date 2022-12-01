@@ -19,9 +19,13 @@ public class FooHandler {
   public Mono<ServerResponse> getEvents(ServerRequest request) {
 
       int delayInSeconds = 1;
-      Optional<String> opt = Optional.ofNullable(request.pathVariable("delayInSeconds"));
-      if(opt.isPresent()) {
-          delayInSeconds = Integer.parseInt(request.pathVariable("delayInSeconds"));
+      try{
+          Optional<String> opt = Optional.ofNullable(request.pathVariable("delayInSeconds"));
+          if(opt.isPresent()) {
+              delayInSeconds = Integer.parseInt(request.pathVariable("delayInSeconds"));
+          }
+      }catch(Exception e){
+
       }
       Flux<Foo> foos = Flux.interval(Duration.ofSeconds(delayInSeconds)).map(val -> new Foo(val,"event"+val));
 	
